@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Pizza Amore</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07050f;--surface:#100d1c;--card:#181428;--accent:#e8641a;--gold:#f5b941;--cream:#ede8ff;--muted:#5e5480;--text:#ddd6ff;--ok:#4caf7d;--err:#e53935;--r:12px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
+
+/* ── LOGIN ── */
+#loginWrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.login-card{background:var(--surface);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:40px 36px;width:100%;max-width:360px;text-align:center;}
+.login-card h1{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--cream);margin-bottom:4px;}
+.login-card p{color:var(--muted);font-size:.88rem;margin-bottom:26px;}
+.li{width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;margin-bottom:12px;}
+.li:focus{border-color:var(--accent);}
+.lb{width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px;font-size:.97rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.lb:hover{background:#cf5815;}
+.lerr{color:var(--err);font-size:.83rem;margin-top:10px;}
+
+/* ── APP ── */
+#appWrap{display:none;}
+.topbar{background:var(--surface);border-bottom:1px solid rgba(255,255,255,.06);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar-logo{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--cream);display:flex;align-items:center;gap:8px;}
+.topbar-sub{font-size:.65rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.logoutbtn{background:rgba(229,57,53,.12);border:1px solid rgba(229,57,53,.3);color:#ef9a9a;padding:7px 16px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:500;}
+.logoutbtn:hover{background:rgba(229,57,53,.25);}
+
+.main{padding:24px;max-width:1320px;margin:0 auto;}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:13px;margin-bottom:26px;}
+.sc{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:16px;}
+.sc.orange{border-color:rgba(232,100,26,.3);background:rgba(232,100,26,.06);}
+.sc.green{border-color:rgba(76,175,125,.3);background:rgba(76,175,125,.06);}
+.sc.gold{border-color:rgba(245,185,65,.3);background:rgba(245,185,65,.06);}
+.sc-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;}
+.sc-val{font-size:1.75rem;font-weight:700;color:var(--cream);}
+.sc-sub{font-size:.75rem;color:var(--muted);margin-top:3px;}
+
+/* filters */
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
+.fsel{background:var(--card);border:1.5px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;cursor:pointer;}
+.fsel:focus{border-color:var(--accent);}
+.finp{background:var(--card);border:1.5px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;width:190px;}
+.finp:focus{border-color:var(--accent);}
+.finp::placeholder{color:var(--muted);}
+.fbtn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;}
+.fbtn:hover{background:#cf5815;}
+.fbtn.sec{background:rgba(255,255,255,.07);color:var(--text);}
+.fbtn.sec:hover{background:rgba(255,255,255,.13);}
+
+/* table */
+.tbl-wrap{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);overflow:auto;}
+table{width:100%;border-collapse:collapse;min-width:900px;}
+th{background:rgba(255,255,255,.04);padding:11px 15px;text-align:left;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.06);}
+td{padding:12px 15px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.86rem;vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.02);}
+.oid{font-weight:700;color:var(--gold);font-size:.8rem;}
+.cname{font-weight:600;color:var(--cream);}
+.cphone{font-size:.77rem;color:var(--muted);}
+.ilist{font-size:.78rem;color:var(--muted);max-width:200px;line-height:1.7;}
+.amt{font-weight:700;color:var(--ok);font-size:.93rem;}
+.pbadge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.7rem;font-weight:600;}
+.p-cod{background:rgba(245,185,65,.12);color:var(--gold);border:1px solid rgba(245,185,65,.3);}
+.p-online{background:rgba(33,150,243,.12);color:#64b5f6;border:1px solid rgba(33,150,243,.3);}
+.txnid{font-size:.7rem;color:var(--muted);margin-top:3px;}
+.addr{font-size:.77rem;color:var(--muted);max-width:165px;line-height:1.5;}
+.dt{font-size:.77rem;color:var(--muted);white-space:nowrap;}
+.ssel{background:transparent;border:1.5px solid rgba(255,255,255,.1);border-radius:20px;padding:4px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.74rem;font-weight:600;cursor:pointer;outline:none;}
+.s-pending{border-color:#ffa726;color:#ffa726;}
+.s-confirmed{border-color:#42a5f5;color:#42a5f5;}
+.s-preparing{border-color:#ab47bc;color:#ab47bc;}
+.s-out_for_delivery{border-color:var(--accent);color:var(--accent);}
+.s-delivered{border-color:var(--ok);color:var(--ok);}
+.s-cancelled{border-color:var(--err);color:#ef9a9a;}
+.no-data{text-align:center;padding:55px 20px;color:var(--muted);}
+.no-data-icon{font-size:2.8rem;margin-bottom:10px;}
+
+/* pagination */
+.pager{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-top:1px solid rgba(255,255,255,.05);}
+.pinfo{font-size:.82rem;color:var(--muted);}
+.pbtns{display:flex;gap:8px;}
+.pbtn{background:var(--card);border:1px solid rgba(255,255,255,.08);color:var(--text);padding:7px 14px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.84rem;}
+.pbtn:hover:not(:disabled){background:var(--accent);color:#fff;border-color:var(--accent);}
+.pbtn:disabled{opacity:.35;cursor:not-allowed;}
+
+/* toast */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--ok);color:#fff;padding:10px 20px;border-radius:10px;font-size:.87rem;font-weight:600;z-index:999;transform:translateY(60px);opacity:0;transition:all .3s;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.err{background:var(--err);}
+
+.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:640px){.main{padding:12px;}.stats{grid-template-columns:1fr 1fr;}.filters{flex-direction:column;align-items:stretch;}.finp{width:100%;}}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="loginWrap">
+  <div class="login-card">
+    <div style="font-size:2.5rem;margin-bottom:12px">🍕</div>
+    <h1>Admin Panel</h1>
+    <p>The Pizza Amore — Gaucher</p>
+    <input class="li" type="password" id="passInput" placeholder="Password daalo" onkeydown="if(event.key==='Enter')login()">
+    <button class="lb" onclick="login()">Login</button>
+    <div class="lerr" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="appWrap">
+  <div class="topbar">
+    <div class="topbar-logo">🍕 Pizza Amore <span class="topbar-sub">&nbsp; Admin Dashboard</span></div>
+    <button class="logoutbtn" onclick="logout()">Logout</button>
+  </div>
+  <div class="main">
+
+    <!-- stats -->
+    <div class="stats">
+      <div class="sc orange"><div class="sc-label">Aaj ke Orders</div><div class="sc-val" id="sTodayO">—</div><div class="sc-sub">Aaj</div></div>
+      <div class="sc green"> <div class="sc-label">Aaj ki Kamaai</div><div class="sc-val" id="sTodayR">—</div><div class="sc-sub">Aaj</div></div>
+      <div class="sc gold">  <div class="sc-label">Total Orders</div> <div class="sc-val" id="sTotalO">—</div><div class="sc-sub">Sab mila ke</div></div>
+      <div class="sc">       <div class="sc-label">Total Revenue</div><div class="sc-val" id="sTotalR">—</div><div class="sc-sub">Delivered orders</div></div>
+    </div>
+
+    <!-- filters -->
+    <div class="filters">
+      <select class="fsel" id="fStatus" onchange="loadOrders()">
+        <option value="">Sab Status</option>
+        <option value="pending">⏳ Pending</option>
+        <option value="confirmed">✅ Confirmed</option>
+        <option value="preparing">👨‍🍳 Preparing</option>
+        <option value="out_for_delivery">🛵 Out for Delivery</option>
+        <option value="delivered">🎉 Delivered</option>
+        <option value="cancelled">❌ Cancelled</option>
+      </select>
+      <input class="finp" type="date" id="fDate" onchange="loadOrders()">
+      <input class="finp" type="text" id="fPhone" placeholder="📞 Phone se dhundho..." oninput="debounce()">
+      <button class="fbtn sec" onclick="clearF()">Reset</button>
+      <button class="fbtn" onclick="loadOrders()">🔄 Refresh</button>
+    </div>
+
+    <!-- table -->
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Amount</th>
+            <th>Payment</th>
+            <th>Address</th>
+            <th>Date/Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="8" class="no-data"><span class="spin"></span></td></tr>
+        </tbody>
+      </table>
+      <div class="pager">
+        <div class="pinfo" id="pinfo">Loading...</div>
+        <div class="pbtns">
+          <button class="pbtn" id="prevBtn" onclick="pg(-1)" disabled>← Pehle</button>
+          <button class="pbtn" id="nextBtn" onclick="pg(1)"  disabled>Agle →</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let token = localStorage.getItem('pa_tok') || '';
+let page  = 0;
+const SZ  = 25;
+let total = 0;
+let dtimer = null;
+
+// ── AUTH ──────────────────────────────────────────
+async function login() {
+  const p = document.getElementById('passInput').value;
+  if (!p) return;
+  try {
+    const r = await fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:p})});
+    const d = await r.json();
+    if (d.ok) { token=d.token; localStorage.setItem('pa_tok',token); boot(); }
+    else document.getElementById('loginErr').textContent = d.msg || 'Galat password';
+  } catch { document.getElementById('loginErr').textContent = 'Server se connect nahi ho paya'; }
+}
+function logout() { token=''; localStorage.removeItem('pa_tok'); location.reload(); }
+
+function boot() {
+  document.getElementById('loginWrap').style.display = 'none';
+  document.getElementById('appWrap').style.display   = 'block';
+  loadStats(); loadOrders();
+  setInterval(()=>{ loadStats(); loadOrders(); }, 30000); // auto-refresh
+}
+
+// ── STATS ─────────────────────────────────────────
+async function loadStats() {
+  try {
+    const r = await fetch('/api/stats',{headers:{Authorization:'Bearer '+token}});
+    const d = await r.json();
+    if (!d.ok) return;
+    document.getElementById('sTodayO').textContent = d.todayOrders;
+    document.getElementById('sTodayR').textContent = '₹' + d.todayRevenue.toLocaleString('en-IN');
+    document.getElementById('sTotalO').textContent = d.totalOrders;
+    document.getElementById('sTotalR').textContent = '₹' + d.totalRevenue.toLocaleString('en-IN');
+  } catch {}
+}
+
+// ── ORDERS ────────────────────────────────────────
+async function loadOrders() {
+  const status = document.getElementById('fStatus').value;
+  const date   = document.getElementById('fDate').value;
+  const phone  = document.getElementById('fPhone').value.trim();
+  const p      = new URLSearchParams({limit:SZ, offset:page*SZ});
+  if (status) p.append('status', status);
+  if (date)   p.append('date',   date);
+  if (phone)  p.append('phone',  phone);
+
+  const tb = document.getElementById('tbody');
+  tb.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--muted)"><span class="spin"></span></td></tr>`;
+
+  try {
+    const r = await fetch(`/api/orders?${p}`,{headers:{Authorization:'Bearer '+token}});
+    const d = await r.json();
+    if (!d.ok) { showToast(d.msg,'err'); return; }
+    total = d.total;
+    renderRows(d.orders);
+    updatePager();
+  } catch {
+    tb.innerHTML = `<tr><td colspan="8" class="no-data"><div class="no-data-icon">❌</div><p>Server se data nahi mila</p></td></tr>`;
+  }
+}
+
+function renderRows(orders) {
+  const tb = document.getElementById('tbody');
+  if (!orders.length) {
+    tb.innerHTML = `<tr><td colspan="8" class="no-data"><div class="no-data-icon">📭</div><p>Koi order nahi mila</p></td></tr>`;
+    return;
+  }
+  tb.innerHTML = orders.map(o => {
+    const items = Array.isArray(o.items) ? o.items : JSON.parse(o.items || '[]');
+    const dt    = new Date(o.created_at);
+    const date  = dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+    const time  = dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    return `<tr>
+      <td class="oid">${o.order_id}</td>
+      <td><div class="cname">${o.customer_name}</div><div class="cphone">📞 ${o.customer_phone}</div></td>
+      <td><div class="ilist">${items.map(i=>`${i.name}${i.size?' ('+i.size+')':''} ×${i.qty}`).join('<br>')}</div></td>
+      <td class="amt">₹${Number(o.total_amount).toLocaleString('en-IN')}</td>
+      <td>
+        <span class="pbadge ${o.payment_method==='cod'?'p-cod':'p-online'}">${o.payment_method==='cod'?'💵 COD':'📱 Online'}</span>
+        ${o.transaction_id?`<div class="txnid">UTR: ${o.transaction_id}</div>`:''}
+      </td>
+      <td class="addr">${o.delivery_address}${o.landmark?'<br><em>📍 '+o.landmark+'</em>':''}</td>
+      <td class="dt">${date}<br>${time}</td>
+      <td>
+        <select class="ssel s-${o.status}" onchange="updateStatus('${o.order_id}',this)">
+          <option value="pending"          ${o.status==='pending'?          'selected':''}>⏳ Pending</option>
+          <option value="confirmed"        ${o.status==='confirmed'?        'selected':''}>✅ Confirmed</option>
+          <option value="preparing"        ${o.status==='preparing'?        'selected':''}>👨‍🍳 Preparing</option>
+          <option value="out_for_delivery" ${o.status==='out_for_delivery'? 'selected':''}>🛵 On the Way</option>
+          <option value="delivered"        ${o.status==='delivered'?        'selected':''}>🎉 Delivered</option>
+          <option value="cancelled"        ${o.status==='cancelled'?        'selected':''}>❌ Cancelled</option>
+        </select>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function updateStatus(orderId, sel) {
+  const s = sel.value;
+  sel.className = `ssel s-${s}`;
+  try {
+    const r = await fetch(`/api/orders/${orderId}/status`,{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},
+      body: JSON.stringify({status:s})
+    });
+    const d = await r.json();
+    if (d.ok) showToast(`✅ ${orderId} → ${s}`);
+    else { showToast(d.msg,'err'); loadOrders(); }
+  } catch { showToast('Update fail','err'); loadOrders(); }
+}
+
+function updatePager() {
+  const start = page*SZ+1, end = Math.min(page*SZ+SZ, total);
+  document.getElementById('pinfo').textContent    = `${start}–${end} of ${total} orders`;
+  document.getElementById('prevBtn').disabled     = page===0;
+  document.getElementById('nextBtn').disabled     = (page*SZ+SZ) >= total;
+}
+
+function pg(dir) { page+=dir; loadOrders(); }
+function clearF() { document.getElementById('fStatus').value=''; document.getElementById('fDate').value=''; document.getElementById('fPhone').value=''; page=0; loadOrders(); }
+function debounce() { clearTimeout(dtimer); dtimer=setTimeout(()=>{page=0;loadOrders();},500); }
+function showToast(msg,type='') { const t=document.getElementById('toast'); t.textContent=msg; t.className='toast'+(type?' '+type:''); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+if (token) boot();
+</script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pizza Amore — Gaucher, Chamoli</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --bg:#0d0a06;--surface:#161209;--card:#1c1710;--card2:#221e14;
+  --accent:#ff6b2b;--accent2:#ff8c42;--gold:#f0a500;--gold2:#ffc842;
+  --cream:#fdf4e3;--red:#e63946;--green:#2d9e6b;
+  --muted:#6b5f46;--muted2:#8a7a5c;--text:#ede3d0;--r:16px;--r2:22px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:100;padding:0 24px;height:66px;display:flex;align-items:center;justify-content:space-between;background:rgba(13,10,6,.92);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,107,43,.1);}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),var(--gold));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 18px rgba(255,107,43,.4);}
+.logo-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:700;color:var(--cream);letter-spacing:-.02em;}
+.logo-sub{font-size:.58rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-top:1px;opacity:.8;}
+.cart-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:50px;padding:10px 20px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 18px rgba(255,107,43,.35);transition:all .25s;}
+.cart-btn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(255,107,43,.5);}
+.cart-count{background:rgba(0,0,0,.3);border-radius:50px;padding:1px 8px;font-size:.73rem;font-weight:700;}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;padding:72px 24px 56px;text-align:center;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% -10%,rgba(255,107,43,.2) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 80% 80%,rgba(240,165,0,.1) 0%,transparent 60%);}
+.hero-rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(255,107,43,.06);}
+.ring:nth-child(1){width:320px;height:320px;}
+.ring:nth-child(2){width:560px;height:560px;border-color:rgba(255,107,43,.04);}
+.ring:nth-child(3){width:800px;height:800px;border-color:rgba(255,107,43,.025);}
+.hero-content{position:relative;z-index:1;}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,43,.1);border:1px solid rgba(255,107,43,.25);border-radius:50px;padding:6px 16px;font-size:.73rem;font-weight:600;color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;animation:fadeUp .5s ease both;}
+.blink{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.4rem,8vw,5.2rem);font-weight:900;line-height:1.0;color:var(--cream);margin-bottom:14px;animation:fadeUp .6s .1s ease both;letter-spacing:-.03em;}
+.hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-desc{color:var(--muted2);font-size:.97rem;max-width:400px;margin:0 auto 32px;animation:fadeUp .6s .2s ease both;line-height:1.65;}
+.hero-stats{display:flex;gap:0;justify-content:center;animation:fadeUp .6s .3s ease both;max-width:340px;margin:0 auto 28px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);overflow:hidden;}
+.hstat{flex:1;padding:14px 8px;text-align:center;border-right:1px solid rgba(255,255,255,.06);}
+.hstat:last-child{border-right:none;}
+.hstat-num{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:700;color:var(--gold);}
+.hstat-lbl{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.offer-banner{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(255,107,43,.14),rgba(240,165,0,.09));border:1px solid rgba(255,107,43,.22);border-radius:var(--r);padding:10px 20px;font-size:.82rem;color:var(--gold2);animation:fadeUp .6s .4s ease both;font-weight:500;}
+
+/* CATEGORIES */
+.cat-wrap{position:sticky;top:66px;z-index:90;background:rgba(13,10,6,.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.04);padding:13px 24px;}
+.cat-scroll{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;}
+.cat-scroll::-webkit-scrollbar{display:none;}
+.cat-btn{flex-shrink:0;padding:8px 18px;border-radius:50px;border:1.5px solid rgba(255,255,255,.07);background:transparent;color:var(--muted2);font-family:'Plus Jakarta Sans',sans-serif;font-size:.81rem;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+.cat-btn:hover{border-color:rgba(255,107,43,.35);color:var(--text);}
+.cat-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff;box-shadow:0 4px 14px rgba(255,107,43,.35);font-weight:600;}
+
+/* MENU */
+.menu-wrap{padding:36px 24px 60px;max-width:1140px;margin:0 auto;}
+.menu-heading{font-family:'Fraunces',serif;font-size:1.55rem;font-weight:700;color:var(--cream);margin-bottom:4px;display:flex;align-items:center;gap:12px;letter-spacing:-.02em;}
+.menu-heading::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(255,107,43,.3),transparent);}
+.menu-sub{font-size:.8rem;color:var(--muted);margin-bottom:26px;}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:18px;}
+
+/* FOOD CARD */
+.food-card{background:var(--card);border-radius:var(--r2);border:1px solid rgba(255,255,255,.05);overflow:hidden;transition:transform .3s cubic-bezier(.2,0,0,1),box-shadow .3s;animation:fadeUp .5s ease both;}
+.food-card:hover{transform:translateY(-6px);box-shadow:0 22px 52px rgba(0,0,0,.6),0 0 0 1px rgba(255,107,43,.12);}
+.food-img-wrap{position:relative;overflow:hidden;}
+.food-img{width:100%;height:165px;object-fit:cover;display:block;background:var(--surface);transition:transform .4s cubic-bezier(.2,0,0,1);}
+.food-card:hover .food-img{transform:scale(1.06);}
+.food-img-grad{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 45%,rgba(28,23,16,.85) 100%);}
+.food-badges{position:absolute;top:11px;left:11px;display:flex;gap:5px;flex-wrap:wrap;}
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:.63rem;padding:3px 9px;border-radius:50px;font-weight:700;backdrop-filter:blur(8px);}
+.bveg{background:rgba(45,158,107,.88);color:#fff;}
+.bnonveg{background:rgba(230,57,70,.88);color:#fff;}
+.bpop{background:rgba(240,165,0,.88);color:#000;}
+.bprem{background:rgba(0,0,0,.72);color:var(--gold);border:1px solid rgba(240,165,0,.4);}
+.food-body{padding:15px;}
+.food-name{font-family:'Fraunces',serif;font-weight:700;font-size:1rem;color:var(--cream);margin-bottom:5px;letter-spacing:-.01em;}
+.food-desc{font-size:.75rem;color:var(--muted2);margin-bottom:13px;line-height:1.5;}
+.size-row{display:flex;gap:6px;margin-bottom:13px;}
+.size-btn{flex:1;padding:6px 4px;border-radius:10px;border:1.5px solid rgba(255,255,255,.08);background:transparent;color:var(--muted2);font-family:'Plus Jakarta Sans',sans-serif;font-size:.72rem;font-weight:600;cursor:pointer;text-align:center;transition:all .18s;line-height:1.3;}
+.size-btn:hover{border-color:rgba(255,107,43,.45);color:var(--text);}
+.size-btn.sel{border-color:var(--accent);background:rgba(255,107,43,.11);color:var(--cream);}
+.sz-lbl{font-size:.63rem;color:inherit;margin-top:1px;}
+.food-foot{display:flex;align-items:center;justify-content:space-between;}
+.food-price{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700;color:var(--gold);}
+.add-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:50px;padding:8px 18px;font-size:.79rem;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:all .2s;box-shadow:0 3px 12px rgba(255,107,43,.28);}
+.add-btn:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(255,107,43,.5);}
+.add-btn.added{background:linear-gradient(135deg,var(--green),#3dbb80);box-shadow:0 3px 12px rgba(45,158,107,.28);}
+
+/* CART */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.76);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);}
+.overlay.open{opacity:1;pointer-events:all;}
+.cart-panel{position:fixed;right:0;top:0;bottom:0;width:min(440px,100vw);background:var(--surface);border-left:1px solid rgba(255,255,255,.06);z-index:201;transform:translateX(100%);transition:transform .38s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;}
+.cart-panel.open{transform:translateX(0);}
+.cart-top{padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;}
+.cart-title{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;color:var(--cream);}
+.close-btn{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.07);border:none;color:var(--text);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.close-btn:hover{background:rgba(255,255,255,.14);}
+.cart-body{flex:1;overflow-y:auto;padding:16px 24px;}
+.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--muted);}
+.cart-empty-icon{font-size:3.5rem;}
+.cart-item{display:flex;gap:13px;align-items:center;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.ci-img{width:54px;height:54px;border-radius:12px;object-fit:cover;flex-shrink:0;background:var(--card2);}
+.ci-info{flex:1;}
+.ci-name{font-weight:600;font-size:.89rem;color:var(--cream);}
+.ci-size{font-size:.71rem;color:var(--muted2);margin-top:1px;}
+.ci-price{font-size:.81rem;color:var(--gold);margin-top:3px;font-weight:500;}
+.qty-ctrl{display:flex;align-items:center;gap:10px;}
+.qty-btn{width:28px;height:28px;border-radius:50%;background:rgba(255,107,43,.14);border:1px solid rgba(255,107,43,.28);color:var(--accent);cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.qty-btn:hover{background:var(--accent);color:#fff;}
+.qty-num{font-weight:700;min-width:18px;text-align:center;font-size:.9rem;}
+.cart-foot{padding:20px 24px;border-top:1px solid rgba(255,255,255,.06);}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
+.cart-total-lbl{color:var(--muted2);font-size:.9rem;}
+.cart-total-amt{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;color:var(--gold);}
+.checkout-btn{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:var(--r);padding:14px;font-size:.95rem;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;box-shadow:0 6px 22px rgba(255,107,43,.4);transition:all .25s;}
+.checkout-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,107,43,.55);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:16px;backdrop-filter:blur(8px);}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border-radius:var(--r2);border:1px solid rgba(255,255,255,.07);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;transform:scale(.94) translateY(18px);transition:transform .35s cubic-bezier(.2,0,0,1);padding:30px;}
+.modal-overlay.open .modal{transform:scale(1) translateY(0);}
+.modal-icon{font-size:2rem;margin-bottom:8px;}
+.modal h2{font-family:'Fraunces',serif;font-size:1.65rem;font-weight:700;color:var(--cream);margin-bottom:4px;letter-spacing:-.02em;}
+.modal-sub{color:var(--muted2);font-size:.84rem;margin-bottom:24px;}
+.step-bar{display:flex;gap:6px;margin-bottom:26px;}
+.step{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.07);}
+.step.done{background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.flabel{display:block;font-size:.72rem;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;}
+.finput{width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.07);border-radius:12px;padding:12px 15px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:.91rem;outline:none;transition:all .2s;margin-bottom:16px;}
+.finput:focus{border-color:var(--accent);background:var(--card2);}
+.finput::placeholder{color:var(--muted);}
+textarea.finput{resize:vertical;min-height:68px;}
+.loc-row{display:flex;gap:8px;margin-bottom:16px;}
+.loc-row .finput{flex:1;margin-bottom:0;}
+.gps-btn{background:rgba(255,107,43,.12);border:1.5px solid rgba(255,107,43,.28);color:var(--accent);border-radius:12px;padding:12px 14px;cursor:pointer;font-size:1.05rem;transition:background .2s;}
+.gps-btn:hover{background:rgba(255,107,43,.22);}
+.gps-ok{background:rgba(45,158,107,.1);border:1px solid rgba(45,158,107,.28);border-radius:10px;padding:10px 14px;font-size:.79rem;color:#3dbb80;margin-bottom:16px;}
+.pay-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.pay-opt{border:1.5px solid rgba(255,255,255,.07);border-radius:16px;padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .2s;}
+.pay-opt:hover{border-color:rgba(255,107,43,.28);background:rgba(255,107,43,.04);}
+.pay-opt.sel{border-color:var(--accent);background:rgba(255,107,43,.08);box-shadow:0 0 0 1px rgba(255,107,43,.14);}
+.pay-icon{font-size:1.55rem;}
+.pay-name{font-weight:600;color:var(--cream);font-size:.9rem;}
+.pay-desc{font-size:.73rem;color:var(--muted2);margin-top:1px;}
+.pay-radio{margin-left:auto;width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pay-opt.sel .pay-radio{border-color:var(--accent);}
+.pay-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);display:none;}
+.pay-opt.sel .pay-dot{display:block;}
+.qr-box{background:#fff;border-radius:18px;padding:18px;text-align:center;margin:14px 0;box-shadow:0 10px 40px rgba(0,0,0,.5);}
+.qr-label{font-size:.74rem;color:#555;margin-top:10px;line-height:1.6;}
+.upi-apps{display:flex;justify-content:center;gap:10px;margin:12px 0;}
+.upi-app{display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;padding:10px 13px;border-radius:14px;border:1.5px solid rgba(255,255,255,.07);background:var(--card2);transition:all .2s;}
+.upi-app:hover{border-color:var(--accent);background:rgba(255,107,43,.08);}
+.upi-app-icon{font-size:1.5rem;}
+.upi-app-name{font-size:.67rem;color:var(--muted2);font-weight:500;}
+.upi-open-btn{width:100%;background:linear-gradient(135deg,#5b4de8,#8b5cf6);color:#fff;border:none;border-radius:12px;padding:13px;font-size:.91rem;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 5px 18px rgba(91,77,232,.4);}
+.upi-open-btn:hover{opacity:.9;transform:translateY(-1px);}
+.txn-box{border-top:1px solid rgba(255,255,255,.07);padding-top:15px;}
+.txn-note{font-size:.77rem;color:var(--muted2);margin-bottom:12px;background:rgba(240,165,0,.07);border:1px solid rgba(240,165,0,.18);border-radius:10px;padding:10px 14px;line-height:1.5;}
+.order-summary{background:var(--card);border-radius:14px;padding:15px;margin-bottom:18px;border:1px solid rgba(255,255,255,.05);}
+.sum-row{display:flex;justify-content:space-between;padding:5px 0;font-size:.86rem;}
+.sum-row.total{border-top:1px solid rgba(255,255,255,.07);margin-top:8px;padding-top:10px;font-weight:700;font-size:.94rem;color:var(--cream);}
+.info-box{background:var(--card);border-radius:12px;padding:12px 15px;margin-bottom:13px;font-size:.85rem;line-height:1.55;border:1px solid rgba(255,255,255,.05);}
+.info-box.green{background:rgba(45,158,107,.08);border-color:rgba(45,158,107,.2);color:#3dbb80;}
+.modal-btns{display:flex;gap:10px;margin-top:16px;}
+.back-btn{padding:12px 22px;border-radius:12px;border:1.5px solid rgba(255,255,255,.09);background:transparent;color:var(--text);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:.91rem;font-weight:500;transition:background .2s;}
+.back-btn:hover{background:rgba(255,255,255,.06);}
+.next-btn{flex:1;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:.94rem;font-weight:600;box-shadow:0 4px 16px rgba(255,107,43,.32);transition:all .2s;}
+.next-btn:hover{transform:translateY(-1px);box-shadow:0 7px 24px rgba(255,107,43,.48);}
+.next-btn:disabled{background:#333;box-shadow:none;cursor:not-allowed;transform:none;}
+.next-btn.gbtn{background:linear-gradient(135deg,var(--green),#3dbb80);box-shadow:0 4px 16px rgba(45,158,107,.32);}
+
+/* SUCCESS */
+.success-wrap{text-align:center;padding:18px 0;}
+.success-icon{font-size:5rem;margin-bottom:14px;animation:pop .6s cubic-bezier(.2,0,0,1.8) both;}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.success-wrap h2{font-family:'Fraunces',serif;font-size:2rem;font-weight:900;color:var(--cream);margin-bottom:8px;letter-spacing:-.03em;}
+.success-wrap p{color:var(--muted2);margin-bottom:6px;}
+.order-id-big{font-family:'Fraunces',serif;font-size:1.25rem;color:var(--gold);font-weight:700;letter-spacing:1px;}
+.track-box{background:rgba(240,165,0,.07);border:1px solid rgba(240,165,0,.18);border-radius:16px;padding:16px;margin-top:18px;font-size:.82rem;color:var(--gold2);line-height:2;text-align:left;}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--green);color:#fff;padding:10px 24px;border-radius:50px;font-weight:600;font-size:.85rem;z-index:500;transition:transform .35s cubic-bezier(.2,0,0,1.3);pointer-events:none;white-space:nowrap;box-shadow:0 8px 28px rgba(0,0,0,.4);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.err{background:var(--red);}
+
+.spin{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,.05);margin-top:20px;color:var(--muted);font-size:.78rem;}
+.footer-offer{display:inline-block;background:rgba(255,107,43,.1);border:1px solid rgba(255,107,43,.2);border-radius:50px;padding:8px 20px;margin-bottom:14px;color:var(--accent2);font-size:.82rem;font-weight:500;}
+footer p{line-height:2.1;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.pulse{animation:pulse .4s ease;}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.22)}100%{transform:scale(1)}}
+
+@media(max-width:500px){
+  .menu-grid{grid-template-columns:1fr;}
+  header{padding:0 16px;}
+  .menu-wrap{padding:26px 16px 50px;}
+  .modal{padding:22px 16px;}
+  .hero h1{font-size:2.2rem;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🍕</div>
+    <div>
+      <div class="logo-name">The Pizza Amore</div>
+      <div class="logo-sub">Gaucher · Chamoli · Free Delivery</div>
+    </div>
+  </div>
+  <button class="cart-btn" onclick="toggleCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+</header>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-rings"><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
+  <div class="hero-content">
+    <div class="hero-pill"><span class="blink"></span> Abhi Open · Fast Delivery</div>
+    <h1>Gauchar ka<br><em>Best Pizza</em></h1>
+    <p class="hero-desc">Haath se bana, taze ingredients se, seedha aapke darwaze tak — garam garam!</p>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-num">30–45</div><div class="hstat-lbl">Min Delivery</div></div>
+      <div class="hstat"><div class="hstat-num">4.9★</div><div class="hstat-lbl">Rating</div></div>
+      <div class="hstat"><div class="hstat-num">50+</div><div class="hstat-lbl">Items</div></div>
+    </div>
+    <div class="offer-banner">🎉 &nbsp;Har Shukravar — Pizza Buy One Get One FREE!</div>
+  </div>
+</section>
+
+<div class="cat-wrap">
+  <div class="cat-scroll">
+    <button class="cat-btn active" onclick="filterMenu(this,'all')">🍽️ Sab</button>
+    <button class="cat-btn" onclick="filterMenu(this,'vegpizza')">🟢 Veg Pizza</button>
+    <button class="cat-btn" onclick="filterMenu(this,'nonvegpizza')">🔴 Non-Veg Pizza</button>
+    <button class="cat-btn" onclick="filterMenu(this,'starters')">🥖 Starters</button>
+    <button class="cat-btn" onclick="filterMenu(this,'burgers')">🍔 Burgers</button>
+    <button class="cat-btn" onclick="filterMenu(this,'pasta')">🍝 Pasta</button>
+    <button class="cat-btn" onclick="filterMenu(this,'desserts')">🍫 Desserts</button>
+    <button class="cat-btn" onclick="filterMenu(this,'drinks')">🥤 Drinks</button>
+    <button class="cat-btn" onclick="filterMenu(this,'deals')">🔥 Hot Deals</button>
+  </div>
+</div>
+
+<div class="menu-wrap">
+  <h2 class="menu-heading">Hamara Menu</h2>
+  <p class="menu-sub">Taze ingredients · Haath se bana · Garam deliver</p>
+  <div class="menu-grid" id="menuGrid"></div>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-top">
+    <div class="cart-title">🛒 Aapka Order</div>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty"><div class="cart-empty-icon">🍕</div><p>Cart khaali hai</p></div>
+  </div>
+  <div class="cart-foot">
+    <div class="cart-total-row">
+      <span class="cart-total-lbl">Total</span>
+      <span class="cart-total-amt" id="cartTotal">₹0</span>
+    </div>
+    <button class="checkout-btn" onclick="openCheckout()">Checkout karo →</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal" id="modalContent"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<footer>
+  <div class="footer-offer">🎉 Har Shukravar — Pizza Buy One Get One FREE!</div>
+  <p>🍕 The Pizza Amore — Palsari Aam, Gaucher, Distt. Chamoli</p>
+  <p>📞 7453950529 &nbsp;·&nbsp; 7454850529 &nbsp;·&nbsp; 🏠 Free Home Delivery</p>
+</footer>
+
+<script>
+const CAFE_UPI='YOUR_UPI@upi', CAFE_NAME='The Pizza Amore';
+
+// Helper — Unsplash se image URL banana
+const u=(id,w=400,h=220)=>`https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&q=85`;
+
+const MENU=[
+  // ── VEG PIZZAS ──
+  {id:1, cat:'vegpizza', name:'Margherita',              desc:'Pizza Sauce & Cheese',                                              type:'veg',   popular:false, sizes:{S:89,M:205,L:349},
+   img:u('photo-1574071318508-1cdbab80d002')},
+  {id:2, cat:'vegpizza', name:'One Love (Onion)',         desc:'Cheese & Onion',                                                    type:'veg',   popular:false, sizes:{S:99,M:215,L:379},
+   img:u('photo-1571407970349-bc81e71e9c8e')},
+  {id:3, cat:'vegpizza', name:'Double Cheese Margherita', desc:'Garlic Butter, Extra Cheese',                                       type:'veg',   popular:true,  sizes:{S:195,M:369,L:549},
+   img:u('photo-1593560708920-61dd98c46a4e')},
+  {id:4, cat:'vegpizza', name:'Maxican Veg',              desc:'Onion, Jalapeno, Tomato',                                           type:'veg',   popular:false, sizes:{S:195,M:369,L:549},
+   img:u('photo-1565299585323-38d6b0865b47')},
+  {id:5, cat:'vegpizza', name:"D'Amore Veggie",           desc:'Onion, Capsicum, Sweetcorn, Mushroom',                              type:'veg',   popular:false, sizes:{S:195,M:369,L:549},
+   img:u('photo-1552539618-7eec9b4d1796')},
+  {id:6, cat:'vegpizza', name:'Schezwan Veggie',          desc:'Onion, Jalapeno, Sweetcorn',                                        type:'veg',   popular:false, sizes:{S:195,M:369,L:549},
+   img:u('photo-1604382354936-07c5d9983bd3')},
+  {id:7, cat:'vegpizza', name:'Spicy Veg',                desc:'Onion, Capsicum, Green Chilli, Coriander',                          type:'veg',   popular:false, sizes:{S:195,M:369,L:549},
+   img:u('photo-1628840042765-356cda07504e')},
+  {id:8, cat:'vegpizza', name:'5 Star Deluxe (Veg)',      desc:'Babycorn, Capsicum, Jalapeno, Red Pepper, Paneer',                  type:'veg',   popular:true,  sizes:{S:229,M:429,L:629},
+   img:u('photo-1548369937-47519962c11a')},
+  {id:9, cat:'vegpizza', name:'Farmhouse Fiesta',         desc:'Onion, Capsicum, Sweetcorn, Mushroom, Tomato, Black Olives',        type:'veg',   popular:true,  sizes:{S:229,M:429,L:629},
+   img:u('photo-1565299624946-b28f40a0ae38')},
+  {id:10,cat:'vegpizza', name:'Tandoori Chunky Paneer',   desc:'Onion, Capsicum, Red Pepper, Chunky Paneer',                        type:'veg',   popular:false, sizes:{S:195,M:369,L:549},
+   img:u('photo-1588591795084-1770cb3be374')},
+  {id:11,cat:'vegpizza', name:'Veg Delight',              desc:'Onion, Capsicum, Mushroom, Chunky Paneer',                          type:'veg',   popular:false, sizes:{S:229,M:429,L:629},
+   img:u('photo-1544982503-9f984c14501a')},
+  {id:12,cat:'vegpizza', name:'Salsa Mexican',            desc:'Salsa Sauce, Onion, Capsicum, Red Pepper, Paneer',                  type:'veg',   popular:false, sizes:{S:229,M:429,L:629},
+   img:u('photo-1513104890138-7c749659a591')},
+  {id:13,cat:'vegpizza', name:'Veg Extravaganza',         desc:'Onion, Capsicum, Paneer, Olive, Mushroom, Jalapeno, Extra Cheese',  type:'veg',   popular:true,  sizes:{S:265,M:475,L:675}, premium:true,
+   img:u('photo-1506354666786-959d6d497f1a')},
+  {id:14,cat:'vegpizza', name:'Veg Supreme',              desc:'Onion, Capsicum, Tomato, Mushroom, Jalapeno, Sweetcorn, Olive Oil', type:'veg',   popular:false, sizes:{S:265,M:475,L:675}, premium:true,
+   img:u('photo-1589840700256-41c5d84b3a49')},
+
+  // ── NON-VEG PIZZAS ──
+  {id:20,cat:'nonvegpizza',name:'Chicken Sausage',        desc:'Onion & Chicken Sausage',                                           type:'nonveg',popular:false, sizes:{S:160,M:329,L:479},
+   img:u('photo-1565299585323-38d6b0865b47')},
+  {id:21,cat:'nonvegpizza',name:'Grilled Chicken',        desc:'BBQ Chicken, Onion, Sweetcorn',                                     type:'nonveg',popular:true,  sizes:{S:240,M:439,L:639},
+   img:u('photo-1571407970349-bc81e71e9c8e')},
+  {id:22,cat:'nonvegpizza',name:'Non Veg Delight',        desc:'Onion, Chicken Salami, Chicken Sausage',                            type:'nonveg',popular:false, sizes:{S:240,M:439,L:639},
+   img:u('photo-1585238342024-78d387f4a707')},
+  {id:23,cat:'nonvegpizza',name:'Chicken Tikka',          desc:'Onion, Capsicum, Chicken Tikka, Coriander',                         type:'nonveg',popular:true,  sizes:{S:240,M:439,L:639},
+   img:u('photo-1604382354936-07c5d9983bd3')},
+  {id:24,cat:'nonvegpizza',name:'Chicken Supreme',        desc:'Onion, Chicken, Sweetcorn, Chicken Salami',                         type:'nonveg',popular:false, sizes:{S:240,M:439,L:639},
+   img:u('photo-1628840042765-356cda07504e')},
+  {id:25,cat:'nonvegpizza',name:'Chicken Smokin',         desc:'Onion, Capsicum, BBQ Chicken',                                      type:'nonveg',popular:false, sizes:{S:240,M:439,L:639},
+   img:u('photo-1548369937-47519962c11a')},
+  {id:26,cat:'nonvegpizza',name:'American Hot',           desc:'Onion, Jalapeno, Pepperoni',                                        type:'nonveg',popular:false, sizes:{S:240,M:439,L:639},
+   img:u('photo-1513104890138-7c749659a591')},
+  {id:27,cat:'nonvegpizza',name:'Gauchar Hit',            desc:'Onion, Spinach, Green Chilli, Red Pepper, Spicy Chicken',           type:'nonveg',popular:true,  sizes:{S:349,M:539,L:709}, premium:true,
+   img:u('photo-1593560708920-61dd98c46a4e')},
+  {id:28,cat:'nonvegpizza',name:'5 Star Delux (N.Veg)',   desc:'Babycorn, Capsicum, Jalapeno, Red Pepper, Chicken Tikka',           type:'nonveg',popular:false, sizes:{S:349,M:559,L:709}, premium:true,
+   img:u('photo-1506354666786-959d6d497f1a')},
+  {id:29,cat:'nonvegpizza',name:'Spicy Mutton',           desc:'Onion, Sweetcorn, Spicy Mutton',                                    type:'nonveg',popular:false, sizes:{S:349,M:539,L:709}, premium:true,
+   img:u('photo-1574071318508-1cdbab80d002')},
+  {id:30,cat:'nonvegpizza',name:'Tandoori Spicy Hot',     desc:'Onion, Capsicum, Mushroom, Chicken Sausage, Spicy Chicken',         type:'nonveg',popular:false, sizes:{S:349,M:539,L:709}, premium:true,
+   img:u('photo-1565299624946-b28f40a0ae38')},
+  {id:31,cat:'nonvegpizza',name:'Bombay Mix',             desc:'Onion, Corn, Green Chilli, Garlic, Ginger, Spicy Chicken',          type:'nonveg',popular:false, sizes:{S:349,M:539,L:709}, premium:true,
+   img:u('photo-1552539618-7eec9b4d1796')},
+  {id:32,cat:'nonvegpizza',name:'NH-58 (N.Veg)',          desc:'Onion, Capsicum, Mushroom, Olive, Pepperoni, Sausage',              type:'nonveg',popular:true,  sizes:{S:349,M:539,L:709}, premium:true,
+   img:u('photo-1588591795084-1770cb3be374')},
+  {id:33,cat:'nonvegpizza',name:'Mighty Meaty',           desc:'Sausage, Pepperoni, Salami, Chicken Tikka, Black Olives',           type:'nonveg',popular:true,  sizes:{S:349,M:539,L:709}, premium:true,
+   img:u('photo-1589840700256-41c5d84b3a49')},
+
+  // ── STARTERS ──
+  {id:40,cat:'starters',name:'Garlic Bread Stick',        desc:'Crispy garlic bread sticks',                  type:'veg',   popular:false, price:80,
+   img:u('photo-1619895092538-128341789043')},
+  {id:41,cat:'starters',name:'Cheesy Bites',              desc:'Soft cheesy bite-sized rolls',                type:'veg',   popular:true,  price:110,
+   img:u('photo-1551782450-17144efb9c50')},
+  {id:42,cat:'starters',name:'Stuffed Garlic Bread',      desc:'Garlic bread with cheese & veggies',          type:'veg',   popular:false, price:100,
+   img:u('photo-1598103442097-8b74394b95c3')},
+  {id:43,cat:'starters',name:'Special Garlic Bread',      desc:'Special loaded garlic bread',                 type:'veg',   popular:false, price:149,
+   img:u('photo-1585238342024-78d387f4a707')},
+  {id:44,cat:'starters',name:'French Fries',              desc:'Golden crispy fries with seasoning',          type:'veg',   popular:true,  price:89,
+   img:u('photo-1573080496219-bb080dd4f877')},
+  {id:45,cat:'starters',name:'Grilled Sandwich',          desc:'Toasted sandwich with fresh veggies',         type:'veg',   popular:false, price:59,
+   img:u('photo-1528735602780-2552fd46c7af')},
+  {id:46,cat:'starters',name:'Grilled Sandwich w/Cheese', desc:'Toasted sandwich with melted cheese',         type:'veg',   popular:false, price:89,
+   img:u('photo-1481070555726-e2fe8357725b')},
+  {id:47,cat:'starters',name:'Chicken Nuggets',           desc:'Crispy chicken nuggets with dip',             type:'nonveg',popular:true,  price:199,
+   img:u('photo-1562967914-608f82629710')},
+  {id:48,cat:'starters',name:'Zingy Parcel',              desc:'Spicy zingy chicken wrap',                    type:'nonveg',popular:false, price:149,
+   img:u('photo-1551504734-5ee1c4a1479b')},
+  {id:49,cat:'starters',name:'Veg Single',                desc:'Single serving veg',                          type:'veg',   popular:false, price:99,
+   img:u('photo-1512621776951-a57141f2eefd')},
+  {id:50,cat:'starters',name:'Veg Double',                desc:'Double serving veg',                          type:'veg',   popular:false, price:120,
+   img:u('photo-1546069901-ba9599a7e63c')},
+  {id:51,cat:'starters',name:'Non-Veg Single',            desc:'Single serving non-veg',                      type:'nonveg',popular:false, price:120,
+   img:u('photo-1432139555190-58524dae6a55')},
+  {id:52,cat:'starters',name:'Non-Veg Double',            desc:'Double serving non-veg',                      type:'nonveg',popular:false, price:140,
+   img:u('photo-1504674900247-0877df9cc836')},
+
+  // ── BURGERS ──
+  {id:60,cat:'burgers',name:'Veg Burger',                 desc:'Classic veggie burger',                       type:'veg',   popular:false, price:59,
+   img:u('photo-1550950158-d0d960dff596')},
+  {id:61,cat:'burgers',name:'Non-Veg Burger',             desc:'Classic chicken burger',                      type:'nonveg',popular:false, price:79,
+   img:u('photo-1568901346375-23c9450c58cd')},
+  {id:62,cat:'burgers',name:'Premium Veg Burger',         desc:'Loaded premium veggie burger',                type:'veg',   popular:true,  price:89,
+   img:u('photo-1586190848861-99aa4a171e90')},
+  {id:63,cat:'burgers',name:'Premium Non-Veg Burger',     desc:'Loaded premium chicken burger',               type:'nonveg',popular:true,  price:110,
+   img:u('photo-1553979459-d2229ba7433b')},
+  {id:64,cat:'burgers',name:'Korean Spicy Veg Burger',    desc:'Korean-style spicy veggie burger',            type:'veg',   popular:false, price:79,
+   img:u('photo-1572802419224-296b0aeee0d9')},
+  {id:65,cat:'burgers',name:'Korean Spicy Non-Veg',       desc:'Korean-style spicy chicken burger',           type:'nonveg',popular:false, price:99,
+   img:u('photo-1542574271-7f3b92e6c821')},
+
+  // ── PASTA ──
+  {id:70,cat:'pasta',name:'Red Sauce Veg Pasta',          desc:'Pasta in tangy tomato red sauce',             type:'veg',   popular:false, price:110,
+   img:u('photo-1621996346565-e3dbc646d9a9')},
+  {id:71,cat:'pasta',name:'White Sauce Veg Pasta',        desc:'Pasta in creamy white sauce',                 type:'veg',   popular:true,  price:110,
+   img:u('photo-1555949258-eb67b1ef0ceb')},
+  {id:72,cat:'pasta',name:'Red Sauce N.Veg Pasta',        desc:'Chicken pasta in tomato red sauce',           type:'nonveg',popular:false, price:149,
+   img:u('photo-1563379926898-05f4575a45d8')},
+  {id:73,cat:'pasta',name:'White Sauce N.Veg Pasta',      desc:'Chicken pasta in creamy white sauce',         type:'nonveg',popular:false, price:149,
+   img:u('photo-1611270629569-8b357cb88da9')},
+
+  // ── DESSERTS ──
+  {id:80,cat:'desserts',name:'Brownie',                   desc:'Rich chocolate brownie',                      type:'veg',   popular:true,  price:100,
+   img:u('photo-1606313564200-e75d5e30476c')},
+  {id:81,cat:'desserts',name:'Choco Lava',                desc:'Warm molten chocolate lava cake',             type:'veg',   popular:true,  price:100,
+   img:u('photo-1564355808539-22fda35bed7e')},
+
+  // ── DRINKS ──
+  {id:90,cat:'drinks',name:'Chocolate Shake',             desc:'Rich creamy chocolate milkshake',             type:'veg',   popular:true,  price:95,
+   img:u('photo-1572490122747-3968b75cc699')},
+  {id:91,cat:'drinks',name:'Strawberry Shake',            desc:'Fresh strawberry milkshake',                  type:'veg',   popular:false, price:95,
+   img:u('photo-1553361371-9b22f78e8b1d')},
+  {id:92,cat:'drinks',name:'Banana Shake',                desc:'Thick banana milkshake',                      type:'veg',   popular:false, price:95,
+   img:u('photo-1568909344668-6f14a07b56a0')},
+  {id:93,cat:'drinks',name:'Oreo Shake',                  desc:'Oreo cookies blended milkshake',              type:'veg',   popular:false, price:95,
+   img:u('photo-1481671703460-040cb8a2d909')},
+  {id:94,cat:'drinks',name:'Mint Mojito',                 desc:'Refreshing mint & lime mocktail',             type:'veg',   popular:true,  price:95,
+   img:u('photo-1546171753-97d7676e4602')},
+  {id:95,cat:'drinks',name:'Blue Ocean',                  desc:'Cool blue berry mocktail',                    type:'veg',   popular:false, price:95,
+   img:u('photo-1556679343-c7306c1976bc')},
+  {id:96,cat:'drinks',name:'Coffee',                      desc:'Hot brewed coffee',                           type:'veg',   popular:false, price:40,
+   img:u('photo-1495474472287-4d71bcdd2085')},
+  {id:97,cat:'drinks',name:'Tea',                         desc:'Hot Indian chai',                             type:'veg',   popular:false, price:20,
+   img:u('photo-1571934811356-5cc061b6821f')},
+  {id:98,cat:'drinks',name:'Green Lemon Tea',             desc:'Hot refreshing lemon green tea',              type:'veg',   popular:false, price:25,
+   img:u('photo-1556679343-c7306c1976bc')},
+
+  // ── HOT DEALS ──
+  {id:100,cat:'deals',name:'4 Veg Singles + Coke',        desc:'Best value combo deal',                       type:'veg',   popular:true,  price:339,
+   img:u('photo-1504674900247-0877df9cc836')},
+  {id:101,cat:'deals',name:'Garlic Bread + Coke',         desc:'Perfect snack + drink combo',                 type:'veg',   popular:false, price:110,
+   img:u('photo-1619895092538-128341789043')},
+  {id:102,cat:'deals',name:'Fries + Dip + Coke',          desc:'Crispy fries with dip & coke',                type:'veg',   popular:false, price:125,
+   img:u('photo-1573080496219-bb080dd4f877')},
+  {id:103,cat:'deals',name:'Veg Burger + Coke + Fries',   desc:'Full meal veg combo',                         type:'veg',   popular:true,  price:123,
+   img:u('photo-1586190848861-99aa4a171e90')},
+  {id:104,cat:'deals',name:'Burger + Coke + Fries',       desc:'Full meal combo — any burger',                type:'nonveg',popular:false, price:172,
+   img:u('photo-1553979459-d2229ba7433b')},
+];
+
+const selSz={},cart={};
+let curCat='all',custData={},payMethod='',step=1;
+
+function renderMenu(filter='all'){
+  const grid=document.getElementById('menuGrid');
+  const items=filter==='all'?MENU:MENU.filter(i=>i.cat===filter);
+  grid.innerHTML=items.map((item,idx)=>{
+    const sized=!!item.sizes,sz=selSz[item.id]||'S';
+    const price=sized?item.sizes[sz]:item.price;
+    const key=sized?`${item.id}_${sz}`:`${item.id}`;
+    const inCart=cart[key]?.qty||0;
+    const sizeHTML=sized?`<div class="size-row">${['S','M','L'].map(s=>`<button class="size-btn ${sz===s?'sel':''}" onclick="pickSz(${item.id},'${s}',event)"><div>${s}</div><div class="sz-lbl">₹${item.sizes[s]}</div></button>`).join('')}</div>`:'';
+    return `<div class="food-card" style="animation-delay:${idx*.028}s">
+      <div class="food-img-wrap">
+        <img class="food-img" src="${item.img}" alt="${item.name}" loading="lazy">
+        <div class="food-img-grad"></div>
+        <div class="food-badges">
+          <span class="badge ${item.type==='veg'?'bveg':'bnonveg'}">${item.type==='veg'?'🟢 Veg':'🔴 Non-Veg'}</span>
+          ${item.popular?'<span class="badge bpop">⭐ Popular</span>':''}
+          ${item.premium?'<span class="badge bprem">👑 Premium</span>':''}
+        </div>
+      </div>
+      <div class="food-body">
+        <div class="food-name">${item.name}</div>
+        <div class="food-desc">${item.desc}</div>
+        ${sizeHTML}
+        <div class="food-foot">
+          <span class="food-price">₹${price}</span>
+          <button class="add-btn ${inCart?'added':''}" onclick="addToCart(${item.id})">${inCart?`✓ Added (${inCart})`:'Add +'}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function pickSz(id,s,e){e.stopPropagation();selSz[id]=s;renderMenu(curCat);}
+function filterMenu(el,cat){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');curCat=cat;renderMenu(cat);}
+
+function addToCart(id){
+  const item=MENU.find(m=>m.id===id);
+  const sized=!!item.sizes,sz=sized?(selSz[id]||'S'):null;
+  const key=sized?`${id}_${sz}`:`${id}`,price=sized?item.sizes[sz]:item.price;
+  if(!cart[key]) cart[key]={...item,qty:0,cSz:sz,cPrice:price,key};
+  cart[key].qty++;
+  refreshCart();toast(`${item.name}${sz?' ('+sz+')':''} add hua! 🍕`);
+  const c=document.getElementById('cartCount');c.classList.remove('pulse');void c.offsetWidth;c.classList.add('pulse');
+  renderMenu(curCat);
+}
+function changeQty(key,d){if(!cart[key])return;cart[key].qty+=d;if(cart[key].qty<=0)delete cart[key];refreshCart();renderMenu(curCat);}
+function refreshCart(){
+  const items=Object.values(cart),total=items.reduce((s,i)=>s+i.cPrice*i.qty,0),count=items.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cartCount').textContent=count;
+  document.getElementById('cartTotal').textContent=`₹${total}`;
+  const el=document.getElementById('cartBody');
+  if(!count){el.innerHTML=`<div class="cart-empty"><div class="cart-empty-icon">🍕</div><p>Cart khaali hai</p></div>`;return;}
+  el.innerHTML=items.map(i=>`<div class="cart-item"><img class="ci-img" src="${i.img}" alt="${i.name}"><div class="ci-info"><div class="ci-name">${i.name}</div>${i.cSz?`<div class="ci-size">Size: ${i.cSz}</div>`:''}<div class="ci-price">₹${i.cPrice} × ${i.qty} = ₹${i.cPrice*i.qty}</div></div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('${i.key}',-1)">−</button><span class="qty-num">${i.qty}</span><button class="qty-btn" onclick="changeQty('${i.key}',1)">+</button></div></div>`).join('');
+}
+function toggleCart(){document.getElementById('cartPanel').classList.toggle('open');document.getElementById('overlay').classList.toggle('open');}
+
+function openCheckout(){if(!Object.keys(cart).length){toast('Pehle kuch add karo!','err');return;}toggleCart();step=1;drawStep();document.getElementById('checkoutModal').classList.add('open');}
+function closeModal(){document.getElementById('checkoutModal').classList.remove('open');}
+
+function drawStep(){
+  const m=document.getElementById('modalContent');
+  const sub=Object.values(cart).reduce((s,i)=>s+i.cPrice*i.qty,0);
+  const del=sub>=299?0:30,total=sub+del;
+  const upi=`upi://pay?pa=${CAFE_UPI}&pn=${encodeURIComponent(CAFE_NAME)}&am=${total}&cu=INR&tn=${encodeURIComponent('Pizza Amore Order')}`;
+
+  if(step===1){
+    m.innerHTML=`<div class="modal-icon">📍</div><h2>Delivery Location</h2><p class="modal-sub">Kahan pohanchana hai aapka order?</p><div class="step-bar"><div class="step done"></div><div class="step"></div><div class="step"></div></div><label class="flabel">Aapka Naam *</label><input class="finput" id="fName" placeholder="Poora naam" value="${custData.name||''}"><label class="flabel">Phone Number *</label><input class="finput" id="fPhone" placeholder="+91 XXXXX XXXXX" type="tel" value="${custData.phone||''}"><label class="flabel">Delivery Address *</label><div class="loc-row"><input class="finput" id="fAddr" placeholder="Ghar no., gali, mohalla..." value="${custData.address||''}"><button class="gps-btn" onclick="getGPS()">📡 GPS</button></div>${custData.lat?`<div class="gps-ok">✅ GPS location capture ho gayi!</div>`:''}<label class="flabel">Landmark (Optional)</label><input class="finput" id="fLand" placeholder="School, mandir ke paas..." value="${custData.landmark||''}"><label class="flabel">Special Instructions</label><textarea class="finput" id="fNote" placeholder="Koi khaas baat...">${custData.note||''}</textarea><div class="modal-btns"><button class="back-btn" onclick="closeModal()">Cancel</button><button class="next-btn" onclick="step1Next()">Aage Badhein →</button></div>`;
+  } else if(step===2){
+    m.innerHTML=`<div class="modal-icon">💳</div><h2>Payment Method</h2><p class="modal-sub">Bhugtan kaise karein? Total: <strong style="color:var(--gold)">₹${total}</strong></p><div class="step-bar"><div class="step done"></div><div class="step done"></div><div class="step"></div></div><div class="pay-opts"><div class="pay-opt ${payMethod==='cod'?'sel':''}" onclick="pickPay('cod')"><span class="pay-icon">💵</span><div><div class="pay-name">Cash on Delivery</div><div class="pay-desc">Delivery par naqdh bhugtan</div></div><div class="pay-radio"><div class="pay-dot"></div></div></div><div class="pay-opt ${payMethod==='online'?'sel':''}" onclick="pickPay('online')"><span class="pay-icon">📱</span><div><div class="pay-name">Online Pay (UPI)</div><div class="pay-desc">PhonePe · GPay · Paytm · BHIM</div></div><div class="pay-radio"><div class="pay-dot"></div></div></div></div>${payMethod==='online'?`<div style="text-align:center;font-size:.82rem;color:var(--muted2);margin-bottom:10px">QR scan karo ya app se pay karo — <strong style="color:var(--gold)">₹${total}</strong></div><div class="qr-box"><div id="qrcode"></div><div class="qr-label">Kisi bhi UPI app se scan karo<br><strong>${CAFE_UPI}</strong></div></div><div style="text-align:center;font-size:.75rem;color:var(--muted);margin-bottom:9px">— ya seedha app kholo —</div><div class="upi-apps"><a class="upi-app" href="${upi}" onclick="openUPI(event,'${upi}')"><span class="upi-app-icon">🟢</span><span class="upi-app-name">PhonePe</span></a><a class="upi-app" href="${upi}" onclick="openUPI(event,'${upi}')"><span class="upi-app-icon">🔵</span><span class="upi-app-name">GPay</span></a><a class="upi-app" href="${upi}" onclick="openUPI(event,'${upi}')"><span class="upi-app-icon">🔷</span><span class="upi-app-name">Paytm</span></a><a class="upi-app" href="${upi}" onclick="openUPI(event,'${upi}')"><span class="upi-app-icon">💜</span><span class="upi-app-name">BHIM</span></a></div><button class="upi-open-btn" onclick="openUPI(event,'${upi}')">📲 UPI App se ₹${total} bhejo</button><div class="txn-box"><div class="txn-note">✅ Payment ke baad apna <strong>UTR / Transaction ID</strong> neeche daalo</div><label class="flabel">Transaction ID / UTR *</label><input class="finput" id="fTxn" placeholder="e.g. 425819273651" value="${custData.txn||''}"></div>`:''}<div class="modal-btns" style="margin-top:16px"><button class="back-btn" onclick="step=1;drawStep()">← Wapas</button><button class="next-btn" onclick="step2Next()">Review →</button></div>`;
+    if(payMethod==='online'){setTimeout(()=>{const el=document.getElementById('qrcode');if(el&&typeof QRCode!=='undefined')new QRCode(el,{text:upi,width:176,height:176,colorDark:'#1a0a00',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});},80);}
+  } else if(step===3){
+    m.innerHTML=`<div class="modal-icon">📋</div><h2>Order Review</h2><p class="modal-sub">Sab sahi hai? Toh order karo!</p><div class="step-bar"><div class="step done"></div><div class="step done"></div><div class="step done"></div></div><div class="order-summary">${Object.values(cart).map(i=>`<div class="sum-row"><span>${i.name}${i.cSz?' ('+i.cSz+')':''} × ${i.qty}</span><span style="color:var(--gold)">₹${i.cPrice*i.qty}</span></div>`).join('')}<div class="sum-row" style="color:var(--muted2)"><span>Delivery</span><span>₹${del}${del===0?' 🎉 Free!':''}</span></div><div class="sum-row total"><span>Kul Total</span><span>₹${total}</span></div></div><label class="flabel" style="margin-bottom:6px">Delivery Details</label><div class="info-box green">📍 ${custData.address}${custData.lat?' · GPS ✅':''}<br>👤 ${custData.name} · 📞 ${custData.phone}</div><label class="flabel" style="margin-bottom:6px;margin-top:2px">Payment</label><div class="info-box">${payMethod==='cod'?'💵 Cash on Delivery':`📱 Online UPI · UTR: <strong style="color:var(--gold)">${custData.txn}</strong>`}</div><div class="modal-btns"><button class="back-btn" onclick="step=2;drawStep()">← Wapas</button><button class="next-btn gbtn" id="placeBtn" onclick="placeOrder()">✅ Order Karo!</button></div>`;
+  }
+}
+
+function step1Next(){
+  const name=document.getElementById('fName').value.trim(),phone=document.getElementById('fPhone').value.trim(),addr=document.getElementById('fAddr').value.trim();
+  if(!name) return toast('Naam daalna zaroori hai','err');
+  if(phone.length<8) return toast('Sahi phone number daalo','err');
+  if(!addr&&!custData.lat) return toast('Address ya GPS zaroori hai','err');
+  custData={...custData,name,phone,address:addr||custData.address,landmark:document.getElementById('fLand').value.trim(),note:document.getElementById('fNote').value.trim()};
+  step=2;drawStep();
+}
+function step2Next(){
+  if(!payMethod) return toast('Payment method chuno','err');
+  if(payMethod==='online'){const txn=document.getElementById('fTxn')?.value.trim();if(!txn) return toast('Transaction ID daalna zaroori hai','err');custData.txn=txn;}
+  step=3;drawStep();
+}
+async function placeOrder(){
+  const btn=document.getElementById('placeBtn');
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span>Saving...';
+  const sub=Object.values(cart).reduce((s,i)=>s+i.cPrice*i.qty,0),del=sub>=299?0:30;
+  const payload={customerName:custData.name,customerPhone:custData.phone,deliveryAddress:custData.address,landmark:custData.landmark||'',instructions:custData.note||'',latitude:custData.lat||null,longitude:custData.lng||null,paymentMethod:payMethod,transactionId:custData.txn||null,items:Object.values(cart).map(i=>({id:i.id,name:i.name,size:i.cSz,price:i.cPrice,qty:i.qty})),subtotal:sub,deliveryCharge:del,totalAmount:sub+del};
+  try{
+    const res=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(data.ok){showSuccess(data.order.order_id);Object.keys(cart).forEach(k=>delete cart[k]);refreshCart();}
+    else{toast(data.msg||'Error aaya','err');btn.disabled=false;btn.innerHTML='✅ Order Karo!';}
+  }catch{toast('Server se connect nahi ho paya','err');btn.disabled=false;btn.innerHTML='✅ Order Karo!';}
+}
+function showSuccess(orderId){
+  document.getElementById('modalContent').innerHTML=`<div class="success-wrap"><div class="success-icon">🎉</div><h2>Order Ho Gaya!</h2><p>Aapka pizza taiyaar ho raha hai 🍕🔥</p><p class="order-id-big">#${orderId}</p><div class="track-box">⏱️ Delivery time: <strong>30–45 minute</strong><br>📍 Aapki location save ho gayi!<br>📞 Help: 7453950529 / 7454850529</div><button class="next-btn" style="margin-top:22px;border-radius:14px;padding:14px" onclick="resetAll()">🏠 Menu par Wapas</button></div>`;
+}
+function pickPay(m){payMethod=m;drawStep();}
+function openUPI(e,link){e.preventDefault();window.location.href=link;toast('📲 UPI app khul raha hai...');}
+function getGPS(){
+  toast('📡 Location dhundh raha hai...');
+  if(!navigator.geolocation) return toast('GPS support nahi hai','err');
+  navigator.geolocation.getCurrentPosition(pos=>{
+    custData.lat=pos.coords.latitude;custData.lng=pos.coords.longitude;
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${custData.lat}&lon=${custData.lng}&format=json`).then(r=>r.json()).then(d=>{custData.address=d.display_name||`${custData.lat.toFixed(5)},${custData.lng.toFixed(5)}`;const f=document.getElementById('fAddr');if(f)f.value=custData.address;toast('✅ Location mil gayi!');drawStep();}).catch(()=>{toast('✅ GPS capture!');drawStep();});
+  },()=>toast('❌ GPS permission nahi mili','err'));
+}
+function resetAll(){Object.keys(cart).forEach(k=>delete cart[k]);custData={};payMethod='';step=1;closeModal();refreshCart();renderMenu(curCat);}
+function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+
+renderMenu();
+</script>
+</body>
+</html>
