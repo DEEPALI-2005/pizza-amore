@@ -162,9 +162,22 @@ app.get('/api/stats', adminOnly, async (req, res) => {
   } catch (e) { res.status(500).json({ ok: false, msg: 'Stats error' }); }
 });
 
+// ── PUBLIC TRACK API ─────────────────────────────────
+app.get('/api/track/:orderId', async (req, res) => {
+  try {
+    const r = await db.query(
+      'SELECT order_id,customer_name,customer_phone,delivery_address,payment_method,items,total_amount,status,created_at FROM orders WHERE order_id=$1',
+      [req.params.orderId.toUpperCase()]
+    );
+    if (!r.rows.length) return res.status(404).json({ ok: false, msg: 'Order nahi mila! ID check karo.' });
+    res.json({ ok: true, order: r.rows[0] });
+  } catch (e) { res.status(500).json({ ok: false, msg: 'Server error' }); }
+});
+
 // ── SERVE HTML FILES ──────────────────────────────────
 app.get('/',      (_,res) => res.sendFile(path.join(__dirname,'public','index.html')));
 app.get('/admin', (_,res) => res.sendFile(path.join(__dirname,'public','admin.html')));
+app.get('/track', (_,res) => res.sendFile(path.join(__dirname,'public','track.html')));
 
 app.listen(PORT, () => {
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');

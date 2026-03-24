@@ -550,7 +550,7 @@ async function placeOrder(){
   }catch{toast('Server se connect nahi ho paya','err');btn.disabled=false;btn.innerHTML='✅ Order Karo!';}
 }
 function showSuccess(orderId){
-  document.getElementById('modalContent').innerHTML=`<div class="success-wrap"><div class="success-icon">🎉</div><h2>Order Ho Gaya!</h2><p>Aapka pizza taiyaar ho raha hai 🍕🔥</p><p class="order-id-big">#${orderId}</p><div class="track-box">⏱️ Delivery time: <strong>30–45 minute</strong><br>📍 Aapki location save ho gayi!<br>📞 Help: 7453950529 / 7454850529</div><button class="next-btn" style="margin-top:22px;border-radius:14px;padding:14px" onclick="resetAll()">🏠 Menu par Wapas</button></div>`;
+  document.getElementById('modalContent').innerHTML=`<div class="success-wrap"><div class="success-icon">🎉</div><h2>Order Ho Gaya!</h2><p>Aapka pizza taiyaar ho raha hai 🍕🔥</p><p class="order-id-big">#${orderId}</p><div class="track-box">⏱️ Delivery time: <strong>30–45 minute</strong><br>📍 Aapki location save ho gayi!<br>📞 Help: 7453950529 / 7454850529</div><button class="next-btn" style="margin-top:22px;border-radius:14px;padding:14px" onclick="resetAll()">🏠 Menu par Wapas</button><br><a href="/track?id=${orderId}" style="display:inline-block;margin-top:10px;background:rgba(255,107,43,.15);border:1px solid rgba(255,107,43,.3);border-radius:12px;padding:10px 20px;color:var(--accent);text-decoration:none;font-weight:600;font-size:.88rem">📦 Order Track Karo →</a></div>`;
 }
 function pickPay(m){payMethod=m;drawStep();}
 function openUPI(e,link){e.preventDefault();window.location.href=link;toast('📲 UPI app khul raha hai...');}
