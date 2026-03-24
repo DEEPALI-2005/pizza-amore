@@ -16,14 +16,23 @@ const db = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
   max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
 });
 
 db.connect()
-  .then(() => console.log('✅  PostgreSQL connected!'))
+  .then(client => {
+    console.log('✅  PostgreSQL connected!');
+    client.release();
+  })
   .catch(e => {
     console.error('❌  DB connection failed:', e.message);
-    console.error('    .env file mein DB details check karo');
   });
+
+// Neon free tier mein connection drop hoti hai — error handle karo
+db.on('error', (err) => {
+  console.error('DB pool error (ignored):', err.message);
+});
 
 // ── MIDDLEWARE ────────────────────────────────────────
 app.use(cors());
@@ -45,7 +54,7 @@ function adminOnly(req, res, next) {
 //  PUBLIC API (customer use karega)
 // ══════════════════════════════════════════════════════
 
-// POST /api/orders  ← naya order save karo
+// POST /api/orders
 app.post('/api/orders', async (req, res) => {
   const {
     customerName, customerPhone, deliveryAddress,
@@ -54,7 +63,6 @@ app.post('/api/orders', async (req, res) => {
     items, subtotal, deliveryCharge, totalAmount
   } = req.body;
 
-  // Validation
   if (!customerName || !customerPhone || !deliveryAddress || !paymentMethod || !items || !totalAmount)
     return res.status(400).json({ ok: false, msg: 'Zaroori fields missing hain' });
   if (paymentMethod === 'online' && !transactionId)
@@ -97,7 +105,7 @@ app.post('/api/admin/login', (req, res) => {
   res.json({ ok: true, token });
 });
 
-// GET /api/orders  (admin)
+// GET /api/orders
 app.get('/api/orders', adminOnly, async (req, res) => {
   const { status, date, phone, limit = 25, offset = 0 } = req.query;
   const conds = [], vals = [];
@@ -117,7 +125,7 @@ app.get('/api/orders', adminOnly, async (req, res) => {
   } catch (e) { res.status(500).json({ ok: false, msg: 'DB error' }); }
 });
 
-// PATCH /api/orders/:id/status  (admin)
+// PATCH /api/orders/:id/status
 app.patch('/api/orders/:id/status', adminOnly, async (req, res) => {
   const valid = ['pending','confirmed','preparing','out_for_delivery','delivered','cancelled'];
   const { status } = req.body;
@@ -133,19 +141,14 @@ app.patch('/api/orders/:id/status', adminOnly, async (req, res) => {
   } catch (e) { res.status(500).json({ ok: false, msg: 'DB error' }); }
 });
 
-// GET /api/stats  (admin dashboard)
+// GET /api/stats
 app.get('/api/stats', adminOnly, async (req, res) => {
   try {
     const [today, totals, statuses, topItems] = await Promise.all([
-      db.query(`SELECT COUNT(*) orders, COALESCE(SUM(total_amount),0) revenue
-                FROM orders WHERE DATE(created_at)=CURRENT_DATE`),
-      db.query(`SELECT COUNT(*) orders, COALESCE(SUM(total_amount),0) revenue
-                FROM orders WHERE status!='cancelled'`),
+      db.query(`SELECT COUNT(*) orders, COALESCE(SUM(total_amount),0) revenue FROM orders WHERE DATE(created_at)=CURRENT_DATE`),
+      db.query(`SELECT COUNT(*) orders, COALESCE(SUM(total_amount),0) revenue FROM orders WHERE status!='cancelled'`),
       db.query(`SELECT status, COUNT(*) cnt FROM orders GROUP BY status ORDER BY cnt DESC`),
-      db.query(`SELECT item->>'name' name, SUM((item->>'qty')::int) qty
-                FROM orders, jsonb_array_elements(items) item
-                WHERE status!='cancelled'
-                GROUP BY item->>'name' ORDER BY qty DESC LIMIT 5`)
+      db.query(`SELECT item->>'name' name, SUM((item->>'qty')::int) qty FROM orders, jsonb_array_elements(items) item WHERE status!='cancelled' GROUP BY item->>'name' ORDER BY qty DESC LIMIT 5`)
     ]);
     res.json({
       ok: true,
